@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Gestión de Fibras{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-list-ul"></i> Listado de Líneas</h2>
+        <p class="text-muted">Total: {{ total }} líneas</p>
+    </div>
+</div>
+
+<!-- Buscador y filtros -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="search-form">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Buscar</label>
+                    <input type="search"
+                           class="form-control"
+                           name="q"
+                           value="{{ search }}"
+                           placeholder="Nº línea, sede, cliente, IP..."
+                           hx-get="/lineas/search"
+                           hx-trigger="keyup changed delay:300ms, search"
+                           hx-target="#tabla-container"
+                           hx-include="#search-form">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Proveedor</label>
+                    <select class="form-select" name="proveedor"
+                            hx-get="/lineas/search"
+                            hx-trigger="change"
+                            hx-target="#tabla-container"
+                            hx-include="#search-form">
+                        <option value="">Todos</option>
+                        {% for p in proveedores %}
+                        <option value="{{ p }}" {% if proveedor == p %}selected{% endif %}>{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Tipo Conectividad</label>
+                    <select class="form-select" name="tipo_conectividad"
+                            hx-get="/lineas/search"
+                            hx-trigger="change"
+                            hx-target="#tabla-container"
+                            hx-include="#search-form">
+                        <option value="">Todos</option>
+                        {% for t in tipos_conectividad %}
+                        <option value="{{ t }}" {% if tipo_conectividad == t %}selected{% endif %}>{{ t }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Tipo IP</label>
+                    <select class="form-select" name="tipo_ip"
+                            hx-get="/lineas/search"
+                            hx-trigger="change"
+                            hx-target="#tabla-container"
+                            hx-include="#search-form">
+                        <option value="">Todos</option>
+                        {% for t in tipos_ip %}
+                        <option value="{{ t }}" {% if tipo_ip == t %}selected{% endif %}>{{ t }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Velocidad</label>
+                    <select class="form-select" name="velocidad"
+                            hx-get="/lineas/search"
+                            hx-trigger="change"
+                            hx-target="#tabla-container"
+                            hx-include="#search-form">
+                        <option value="">Todas</option>
+                        {% for v in velocidades %}
+                        <option value="{{ v }}" {% if velocidad == v %}selected{% endif %}>{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <span class="htmx-indicator">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabla -->
+<div id="tabla-container">
+    {% include "partials/lineas_table.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Importar Excel - Gestión de Fibras{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-upload"></i> Importar desde Excel
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if result %}
+                    {% if result.error %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i> {{ result.error }}
+                    </div>
+                    {% elif result.success %}
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i> Importación completada:
+                        <ul class="mb-0 mt-2">
+                            <li><strong>{{ result.imported }}</strong> líneas nuevas importadas</li>
+                            <li><strong>{{ result.updated }}</strong> líneas actualizadas</li>
+                        </ul>
+                    </div>
+                    {% if result.errors %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> Algunos errores durante la importación:
+                        <ul class="mb-0 mt-2">
+                            {% for err in result.errors %}
+                            <li>{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                {% endif %}
+
+                <form method="POST" action="/import" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="file" class="form-label">Selecciona archivo Excel (.xlsx)</label>
+                        <input type="file" class="form-control" id="file" name="file"
+                               accept=".xlsx,.xls" required>
+                        <div class="form-text">
+                            El archivo debe tener las columnas: Nº de línea, Servicio de conectividad,
+                            Sede, Tipo de conectividad, Velocidad de conexión, Tipo de IP, Tipo de mantenimiento
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Nota:</strong> Si una línea ya existe (mismo Nº de línea), se actualizará con los nuevos datos.
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Importar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar' if linea else 'Nueva' }} Línea - Gestión de Fibras{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-{{ 'pencil' if linea else 'plus-circle' }}"></i>
+                    {{ 'Editar' if linea else 'Nueva' }} Línea
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                </div>
+                {% endif %}
+
+                <form method="POST" action="{{ '/lineas/' ~ linea.id if linea else '/lineas' }}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="proveedor" class="form-label">Proveedor *</label>
+                            <select class="form-select" id="proveedor" name="proveedor" required>
+                                <option value="Movistar" {% if not linea or linea.proveedor == 'Movistar' %}selected{% endif %}>Movistar</option>
+                                <option value="LCR" {% if linea and linea.proveedor == 'LCR' %}selected{% endif %}>LCR</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="numero_linea" class="form-label">Nº de Línea *</label>
+                            <input type="text" class="form-control" id="numero_linea" name="numero_linea"
+                                   value="{{ linea.numero_linea if linea else '' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="servicio_conectividad" class="form-label">Servicio de Conectividad</label>
+                            <input type="text" class="form-control" id="servicio_conectividad" name="servicio_conectividad"
+                                   value="{{ linea.servicio_conectividad if linea else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cliente" class="form-label">Cliente</label>
+                            <input type="text" class="form-control" id="cliente" name="cliente"
+                                   value="{{ linea.cliente if linea else '' }}" placeholder="Nombre del cliente">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="direccion_ip" class="form-label">Dirección IP</label>
+                            <input type="text" class="form-control" id="direccion_ip" name="direccion_ip"
+                                   value="{{ linea.direccion_ip if linea else '' }}" placeholder="Ej: 188.64.101.172">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sede" class="form-label">Sede / Dirección</label>
+                        <textarea class="form-control" id="sede" name="sede" rows="2">{{ linea.sede if linea else '' }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="tipo_conectividad" class="form-label">Tipo de Conectividad</label>
+                            <select class="form-select" id="tipo_conectividad" name="tipo_conectividad">
+                                <option value="">Seleccionar...</option>
+                                <option value="FIBRA" {% if linea and linea.tipo_conectividad == 'FIBRA' %}selected{% endif %}>FIBRA</option>
+                                <option value="ADSL" {% if linea and linea.tipo_conectividad == 'ADSL' %}selected{% endif %}>ADSL</option>
+                                <option value="4G" {% if linea and linea.tipo_conectividad == '4G' %}selected{% endif %}>4G</option>
+                                <option value="5G" {% if linea and linea.tipo_conectividad == '5G' %}selected{% endif %}>5G</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="velocidad_conexion" class="form-label">Velocidad</label>
+                            <input type="text" class="form-control" id="velocidad_conexion" name="velocidad_conexion"
+                                   value="{{ linea.velocidad_conexion if linea else '' }}" placeholder="Ej: 1 Gb">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="tipo_ip" class="form-label">Tipo de IP</label>
+                            <select class="form-select" id="tipo_ip" name="tipo_ip">
+                                <option value="">Seleccionar...</option>
+                                <option value="IP ESTATICA" {% if linea and linea.tipo_ip == 'IP ESTATICA' %}selected{% endif %}>IP ESTÁTICA</option>
+                                <option value="IP DINAMICA" {% if linea and linea.tipo_ip == 'IP DINAMICA' %}selected{% endif %}>IP DINÁMICA</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="tipo_mantenimiento" class="form-label">Estado/Mantenimiento</label>
+                            <input type="text" class="form-control" id="tipo_mantenimiento" name="tipo_mantenimiento"
+                                   value="{{ linea.tipo_mantenimiento if linea else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notas" class="form-label">Notas</label>
+                        <textarea class="form-control" id="notas" name="notas" rows="3" placeholder="Notas adicionales...">{{ linea.notas if linea else '' }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ '/lineas/' ~ linea.id if linea else '/' }}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {{ 'Guardar cambios' if linea else 'Crear línea' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

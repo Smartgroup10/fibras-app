@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar' if edit_user else 'Nuevo' }} Usuario - Gestión de Fibras{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-{{ 'pencil' if edit_user else 'person-plus' }}"></i>
+                    {{ 'Editar' if edit_user else 'Nuevo' }} Usuario
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                </div>
+                {% endif %}
+
+                <form method="POST" action="{{ '/users/' ~ edit_user.id if edit_user else '/users' }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de usuario *</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               value="{{ edit_user.username if edit_user else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               value="{{ edit_user.email if edit_user else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            Contraseña {% if not edit_user %}*{% else %}(dejar vacío para mantener){% endif %}
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               {% if not edit_user %}required{% endif %}>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Rol *</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="viewer" {% if edit_user and edit_user.role == 'viewer' %}selected{% endif %}>
+                                Viewer - Solo lectura
+                            </option>
+                            <option value="editor" {% if edit_user and edit_user.role == 'editor' %}selected{% endif %}>
+                                Editor - CRUD líneas
+                            </option>
+                            <option value="admin" {% if edit_user and edit_user.role == 'admin' %}selected{% endif %}>
+                                Admin - Control total
+                            </option>
+                        </select>
+                    </div>
+
+                    {% if edit_user %}
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active"
+                                   {% if edit_user.is_active %}checked{% endif %}>
+                            <label class="form-check-label" for="is_active">
+                                Usuario activo
+                            </label>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/users" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {{ 'Guardar cambios' if edit_user else 'Crear usuario' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

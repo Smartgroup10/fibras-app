@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+sqlalchemy
+PyJWT
+python-multipart
+jinja2
+openpyxl
+pydantic
+pydantic-settings
+bcrypt
