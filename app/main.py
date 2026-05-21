@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from .database import engine, Base
 from .routers import auth, lineas, import_export, users
+from .routers import api as api_router
 
 # Crear tablas
 Base.metadata.create_all(bind=engine)
@@ -17,6 +18,7 @@ app.include_router(auth.router)
 app.include_router(lineas.router)
 app.include_router(import_export.router)
 app.include_router(users.router)
+app.include_router(api_router.router)
 
 if __name__ == "__main__":
     import uvicorn
